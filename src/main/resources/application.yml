@@ -1,0 +1,23 @@
+## YAML Template.
+---
+quarkus:
+  redis:
+    hosts: redis://localhost:6379
+
+management:
+  metrics:
+    tags:
+      application: quarkus-redis
+
+camel:
+  context:
+    name: quarkus-redis
+  main:
+    xml-routes: routes/camel-routes.xml
+  component:
+    activemq:
+      broker-url: failover://tcp://localhost:61616
+
+my:
+  log:
+    message: Innere application.properties

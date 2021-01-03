@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://camel.apache.org/schema/spring"
+        xsi:schemaLocation="
+            http://camel.apache.org/schema/spring
+            http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <route id="file-xml-route" autoStartup="true">
+        <from uri="timer:jmsTimer?period=60000"/>
+        <log message="Sende zu JMS"/>
+        <setBody>
+            <constant><![CDATA[ {"dbRequest": {
+                                    "statements": [{
+                                        "orderNumber": 1,
+                                        "type": "SELECT",
+                                        "statementName": "ot_cmdb_leanix_out.maintenance"
+                                    }],
+                                    "targetChannel": "dev/null"
+                                   }
+                                }
+                    ]]>
+            </constant>
+        </setBody>
+        <log message="==> {{my.log.message}}"/>
+        <to uri="activemq:topic:system/omnitracker/omnitracker-reader-by-sql-channel" />
+    </route>
+
+</routes>
